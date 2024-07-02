@@ -6,7 +6,7 @@ const Category = () => {
   return (
     <section className={classes.category__container}>
       {categoryInfos.map((infos) => (
-        <CategoryCard data={infos} />
+        <CategoryCard data={infos} key={infos.id} />
       ))}
     </section>
   );
