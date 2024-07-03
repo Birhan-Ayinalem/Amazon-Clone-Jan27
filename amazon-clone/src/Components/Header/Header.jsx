@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './Header.module.css'
+import {Link} from 'react-router-dom'
 import { SlLocationPin } from "react-icons/sl"; //Simple Line Icons
 import { BsSearch } from "react-icons/bs"; // Bootstrap Icons
 import { BiCart } from "react-icons/bi"; // BoxIcons
@@ -12,12 +13,12 @@ const Header = () => {
         <div className={classes.header__container}>
           {/* logo */}
           <div className={classes.logo__container}>
-            <a href="">
+            <Link to="/">
               <img
                 src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
                 alt="amazon logo"
               />
-            </a>
+            </Link>
 
             <div className={classes.delivery}>
               <span>
@@ -41,7 +42,7 @@ const Header = () => {
 
           {/* order section */}
           <div className={classes.order__container}>
-            <a href="" className={classes.language}>
+            <Link to="" className={classes.language}>
               <img
                 src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1024px-Flag_of_the_United_States.svg.png"
                 alt="US flag"
@@ -49,19 +50,19 @@ const Header = () => {
               <select name="" id="">
                 <option value="">EN</option>
               </select>
-            </a>
-            <a href="">
+            </Link>
+            <Link to="/auth">
               <p>Hello, sign In</p>
               <span>Account & Lists</span>
-            </a>
-            <a href="">
+            </Link>
+            <Link to="/orders">
               <p>Returns</p>
               <span>& Orders</span>
-            </a>
-            <a href="" className={classes.cart}>
+            </Link>
+            <Link to="/cart" className={classes.cart}>
               <BiCart size={35} />
               <span>0</span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
