@@ -14,7 +14,7 @@ const Header = () => {
 
   // console.log(state.basket)
   return (
-    <>
+    <section className={classes.fixed}>
       <section>
         <div className={classes.header__container}>
           {/* logo */}
@@ -73,7 +73,7 @@ const Header = () => {
         </div>
       </section>
      <LowerHeader /> 
-    </>
+    </section>
   );
 };
 
