@@ -30,6 +30,8 @@ const ProductDetail = () => {
       });
   }, []);
   
+    console.log(product)
+
     return (
       <LayOut>
         {isLoading ? (<Loader />) : (<ProductCard
