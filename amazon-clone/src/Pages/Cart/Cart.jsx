@@ -9,8 +9,10 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const [{ basket, user }, dispatch] = useContext(DataContext);
   const total = basket.reduce((amount, item) => {
-    return item.price + amount;
+    return item.price * item.amount + amount;
   },0);
+
+  console.log(basket)
 
   return (
     <LayOut>
@@ -40,7 +42,7 @@ const Cart = () => {
         {basket?.length !== 0 && (
           <div className={classes.subtotal}>
             <div>
-              <p>Subtotal ({basket?.lenth} item)</p>
+              <p>Subtotal ({basket?.length} item)</p>
               <CurrencyFormat amount={total} />
             </div>
             <span>

@@ -6,9 +6,13 @@
     margin-right: 30px;
 }
 
-/* .container img {
+.container img {
     width: 150px;
-} */
+}
+
+.container div:not(.subtotal) {
+    height: auto;
+}
 
 .cart__container {
     padding: 20px;
