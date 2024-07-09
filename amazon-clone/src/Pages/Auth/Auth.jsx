@@ -1,8 +1,52 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import classes from './Auth.module.css'
-import LayOut from '../../Components/LayOut/LayOut'
 import { Link } from 'react-router-dom';
+import { auth } from './../../Utility/firebase';
+import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from 'firebase/auth'
+import { DataContext } from './../../Components/DataProvider/DataProvider';
+import { Type } from '../../Utility/action.type';
+
 const Auth = () => {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const [{ user }, dispatch] = useContext(DataContext)
+  
+  console.log(user)
+
+  const authHandler = async(e) => {
+    e.preventDefault();
+    // console.log(e)
+    // console.log(e.target.name)
+    if (e.target.name === "signIn") {
+      // start authentication at firebase
+      signInWithEmailAndPassword(auth, email, password).then((userInfo) => {
+        // console.log(userInfo)
+        dispatch({
+          type: Type.SET_USER,
+          user: userInfo.user
+        })
+      }).catch((err) => {
+        console.log(err)
+      })
+      
+    } else {
+      createUserWithEmailAndPassword(auth, email, password).then((userInfo) => {
+        // console.log(userInfo)
+        dispatch({
+          type: Type.SET_USER,
+          user: userInfo.user,
+        });
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }
+
+  console.log(email, password)
+
     return (
       <section className={classes.login}>
         {/* logo  */}
@@ -18,18 +62,46 @@ const Auth = () => {
           <form action="">
             <div>
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                id="email"
+              />
             </div>
             <div>
               <label htmlFor="password">Password</label>
-              <input type="password" id="password" />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                id="password"
+              />
             </div>
-            <button className={classes.login__signInButton}>Sign in</button>
+            <button
+              type="submit"
+              onClick={authHandler}
+              name="signIn"
+              className={classes.login__signInButton}
+            >
+              Sign in
+            </button>
           </form>
           {/* agreement  */}
-          <p>By signing-in you agree to the amazon cloned conditions of Use & Sell. Please see our Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice.</p>
+          <p>
+            By signing-in you agree to the amazon cloned conditions of Use &
+            Sell. Please see our Privacy Notice, our Cookies Notice and our
+            Interest-Based Ads Notice.
+          </p>
           {/* create account btn*/}
-          <button className={classes.login__registerButton}>Create you Amazon Account</button>
+          <button
+            type="submit"
+            onClick={authHandler}
+            name="signUp"
+            className={classes.login__registerButton}
+          >
+            Create you Amazon Account
+          </button>
         </div>
       </section>
     );
