@@ -1,18 +1,24 @@
 import React, { useContext, useState } from 'react'
 import classes from './Auth.module.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth } from './../../Utility/firebase';
-import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from 'firebase/auth'
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 import { DataContext } from './../../Components/DataProvider/DataProvider';
 import { Type } from '../../Utility/action.type';
+import { ClipLoader } from 'react-spinners';
 
 const Auth = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState({
+    signIn: false,
+    signUp: false
+  })
 
   const [{ user }, dispatch] = useContext(DataContext)
+  const navigate = useNavigate()
   
   console.log(user)
 
@@ -22,25 +28,35 @@ const Auth = () => {
     // console.log(e.target.name)
     if (e.target.name === "signIn") {
       // start authentication at firebase
+      setLoading({...loading, signIn:true})
       signInWithEmailAndPassword(auth, email, password).then((userInfo) => {
         // console.log(userInfo)
         dispatch({
           type: Type.SET_USER,
           user: userInfo.user
         })
+        setLoading({ ...loading, singIn: false });
+        navigate("/")
       }).catch((err) => {
         console.log(err)
+        setError(err.message)
+        setLoading({ ...loading, singIn: false });
       })
       
     } else {
+      setLoading({...loading, signUp:true});
       createUserWithEmailAndPassword(auth, email, password).then((userInfo) => {
         // console.log(userInfo)
         dispatch({
           type: Type.SET_USER,
           user: userInfo.user,
         });
+        setLoading({ ...loading, signUp: false });
+        navigate("/");
       }).catch((err) => {
         console.log(err)
+        setError(err.message) 
+        setLoading({ ...loading, signUp: false });
       })
     }
   }
@@ -50,7 +66,7 @@ const Auth = () => {
     return (
       <section className={classes.login}>
         {/* logo  */}
-        <Link>
+        <Link to="/">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
             alt=""
@@ -84,7 +100,11 @@ const Auth = () => {
               name="signIn"
               className={classes.login__signInButton}
             >
-              Sign in
+              {loading.signIn ? (
+                <ClipLoader color="#318a4a" size={18} />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </form>
           {/* agreement  */}
@@ -100,8 +120,15 @@ const Auth = () => {
             name="signUp"
             className={classes.login__registerButton}
           >
-            Create you Amazon Account
+            {loading.signUp ? (
+              <ClipLoader color="#318a4a" size={18} />
+            ) : (
+              "Create you Amazon Account"
+            )}
           </button>
+          {error && (
+            <small style={{ paddingTop: "5px", color: "red" }}>{error}</small>
+          )}
         </div>
       </section>
     );
